@@ -1,0 +1,236 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<style>
+    #donutchart,
+    #donut_single {
+        width: 500px;
+        height: 500px;
+        font-family: Arial;
+    }
+
+    #donutchart {
+        position: relative;
+    }
+
+    #labelOverlay {
+        width: 90px;
+        height: 45px;
+        position: absolute;
+        top: 233px;
+        left: 310px;
+        text-align: center;
+        cursor: default;
+    }
+
+        #labelOverlay p {
+            line-height: 0.3;
+            padding: 0;
+            margin: 8px;
+        }
+
+            #labelOverlay p.used-size {
+                line-height: 0.5;
+                font-size: 20pt;
+                color: #8e8e8e;
+            }
+
+            #labelOverlay p.total-size {
+                line-height: 0.5;
+                font-size: 12pt;
+                color: #cdcdcd;
+            }
+</style>
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div id="chart_div"></div>
+
+<hr />
+
+<div id="combochart2_div" style="width: 900px; height: 500px;"></div>
+
+<hr />
+
+<div id="donutchart" class="col-xs-12 col-sm-6 col-md-4">
+    <div id="donut_chart"></div>
+    <div id="labelOverlay">
+        <p class="used-size">41<span>GB</span></p>
+        <p class="total-size"> of 50GB</p>
+    </div>
+</div>
+
+@section Scripts{
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    $().ready(function () {
+        google.charts.load('current', { packages: ['corechart', 'bar'] });
+        google.charts.setOnLoadCallback(drawDashboard);
+
+        function drawDashboard() {
+
+            // ======= Combo Chart ==================================
+            var dataComboChart = new google.visualization.DataTable();
+            dataComboChart.addColumn('timeofday', 'Time of Day');
+            dataComboChart.addColumn('number', 'Motivation Level');
+            dataComboChart.addColumn('number', 'Energy Level');
+            dataComboChart.addColumn('number', 'Number');
+            dataComboChart.addColumn('number', 'Unknown');
+
+            dataComboChart.addRows([
+                [{ v: [8, 0, 0], f: '8 am' }, 1, .25, 3, 0],
+                [{ v: [9, 0, 0], f: '9 am' }, 2, .5, 4, 2],
+                [{ v: [10, 0, 0], f: '10 am' }, 3, 1, 5, 4],
+                [{ v: [11, 0, 0], f: '11 am' }, 4, 2.25, 6, 3],
+                [{ v: [12, 0, 0], f: '12 pm' }, 5, -5, 5, 8],
+                [{ v: [13, 0, 0], f: '1 pm' }, 16, -3, 4, 7],
+                [{ v: [14, 0, 0], f: '2 pm' }, 7, 4, 3, 6],
+                [{ v: [15, 0, 0], f: '3 pm' }, 8, 5.25, 2, 5],
+                [{ v: [16, 0, 0], f: '4 pm' }, 9, 7.5, 6, 2],
+                [{ v: [17, 0, 0], f: '5 pm' }, 10, -2, -3, 1],
+            ]);
+
+            var optionsComboChart = {
+                title: 'Combo Charts',
+                titleTextStyle: {
+                    color: 'black',
+                    //fontName: 'Arial',
+                    fontSize: 28,
+                    bold: true,
+                    italic: false
+                },
+                focusTarget: 'category',
+                hAxis: {
+                    title: 'Time of Day',
+                    format: 'h:mm a',
+                    viewWindow: {
+                        min: [7, 30, -20],
+                        max: [17, 30, 30]
+                    },
+                    textStyle: {
+                        fontSize: 14,
+                        color: '#053061',
+                        bold: true,
+                        italic: false
+                    },
+                    titleTextStyle: {
+                        fontSize: 18,
+                        color: '#053061',
+                        bold: true,
+                        italic: false
+                    }
+                },
+                vAxis: {
+                    title: 'Rating (scale of -5 -> 10)',
+                    textStyle: {
+                        fontSize: 18,
+                        color: '#67001f',
+                        bold: false,
+                        italic: false
+                    },
+                    titleTextStyle: {
+                        fontSize: 18,
+                        color: '#67001f',
+                        bold: true,
+                        italic: false
+                    }
+                },
+                //colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'],
+                curveType: 'function',
+                height: 500
+            };
+
+            // ========= Combo Chart 2 ====================================
+            // Some raw data (not necessarily accurate)
+            var data = google.visualization.arrayToDataTable([
+                ['Country', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
+                ['NA', 165, 938, 522, 998, 450, 614.6],
+                ['EU', 135, 1120, 599, -1268, 288, 682],
+                ['Asia', -157, 1167, 587, 807, 397, 623],
+                ['USA', 139, 1110, -615, 968, -215, 609.4],
+                ['VietNam', 136, 691, 629, 1026, 366, 569.6]
+            ]);
+
+            var optionsComboChart2 = {
+                title: 'Monthly Coffee Production by Country',
+                titleTextStyle: {
+                    color: 'black',
+                    //fontName: 'Arial',
+                    fontSize: 28,
+                    bold: true,
+                    italic: false
+                },
+                focusTarget: 'category',
+                vAxis: { title: 'Cups' },
+                hAxis: { title: 'Country' },
+                seriesType: 'bars',
+                //series: { 5: { type: 'line' } },
+
+            };
+
+            // ========= Donut Chart ======================================
+            var dataDonutChart = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['Work', 11],
+                ['Eat', 2],
+                ['Commute', 2],
+                ['Watch TV', 2],
+                ['Sleep', 7]
+            ]);
+
+            var optionsDonutChart = {
+                title: 'Donut Charts',
+                titleTextStyle: {
+                    color: 'black',
+                    //fontName: 'Arial',
+                    fontSize: 28,
+                    bold: true,
+                    italic: false
+                },
+                pieHole: 0.5,
+                //colors: ['red', 'blue', '#ec8f6e', '#f3b49f', 'yellow'],
+                legend: {
+                    alignment: 'center',
+                    position: 'right'
+                },
+                pieSliceText: 'percentage',//'none', 'value', 'label'
+
+                width: 900,
+                height: 500
+
+            };
+
+            function resize() {
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                chart.draw(dataComboChart, optionsComboChart);
+
+                var chart = new google.visualization.ComboChart(document.getElementById('combochart2_div'));
+                chart.draw(data, optionsComboChart2);
+
+                var chart = new google.visualization.PieChart(document.getElementById('donut_chart'));
+                chart.draw(dataDonutChart, optionsDonutChart);
+            }
+
+            window.onload = resize();
+            window.onresize = resize;
+
+            var container = document.getElementById('donut_chart');
+            google.visualization.events.addListener(chart, 'ready', function () {
+                var legendCircles = container.getElementsByTagName('circle');
+                Array.prototype.forEach.call(legendCircles, function (circle) {
+                    circle.setAttribute('r', 20);
+                });
+            });
+        }
+
+
+    });
+</script>
+}
